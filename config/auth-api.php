@@ -7,21 +7,21 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    // Préfixe des routes (ex: api/auth)
-    'route_prefix' => 'api/auth',
-
-    // Middleware par défaut
-    'middleware' => ['api'],
-
     // Modèle User utilisé
     'user_model' => \App\Models\User::class,
 
-    // Durée de vie du token (en jours)
-    'token_expiration_days' => 7,
+    // Vérification email activée
+    'verify_email' => env('AUTH_VERIFY_EMAIL', true),
 
-    // Activer l'OTP
-    'otp_enabled' => false,
+    // Durée de vie de l'OTP (en minutes)
+    'otp_expiration' => env('AUTH_OTP_EXPIRATION', 30),
 
-    // Activer la vérification email
-    'email_verification_enabled' => false,
+    // Durée de vie du token (en minutes)
+    'token_expiration' => env('AUTH_TOKEN_EXPIRATION', 1440),
+
+    // Préfixe des routes
+    'route_prefix' => env('AUTH_ROUTE_PREFIX', 'api/auth'),
+
+    // Middleware par défaut
+    'middleware' => ['api'],
 ];

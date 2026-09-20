@@ -2,7 +2,9 @@
 
 namespace Taibi\AuthAPI;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Taibi\AuthAPI\Middleware\RoleMiddleware;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,15 +24,25 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Chargement des routes API
+        // 1. Chargement des routes API
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
 
-        // Chargement des migrations
+        // 2. Chargement des migrations
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        // Publication de la config
+        // 3. Publication de la config
         $this->publishes([
             __DIR__.'/../config/auth-api.php' => config_path('auth-api.php'),
         ], 'auth-api-config');
+
+        // 4. Publication des migrations
+        $this->publishes([
+            __DIR__.'/../database/migrations' => database_path('migrations'),
+        ], 'auth-api-migrations');
+
+        // 5. Enregistrement de l'alias du middleware 'role'
+        /** @var Router $router */
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware('role', RoleMiddleware::class);
     }
 }
